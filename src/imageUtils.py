@@ -1,11 +1,20 @@
 import cv2
 import numpy as np
 import random
-from matplotlib.colors import rgb2hex
-
+from PIL import Image
+import matplotlib.pyplot as plt
 
 # creo un color aleatorio para cada clase/categoria que identifica la red
 COLORS = np.random.uniform(0,127,size=(100,3))
+
+VALID_IMAGE_EXTENSIONS=['jpg','png','jpeg']
+
+def isNotImage(name):
+    ext=name.split('/')[-1].split('.')[-1]
+    return not ext in VALID_IMAGE_EXTENSIONS
+
+def load_image(file_name):
+    return Image.open(file_name).convert("RGB")
 
 def generateMaskImage(image,predictions):
     alpha = 1
@@ -27,6 +36,11 @@ def generateMaskImage(image,predictions):
         cv2.addWeighted(mask_image,alpha,segmentation_map,mask_opacity,gamma,mask_image)
 
     return mask_image
+
+def show_image(img):
+    plt.figure(figsize=(6,4))
+    plt.imshow(img)
+    plt.show()
 
     
 def saveImage(image,file_name='out.jpg'):
