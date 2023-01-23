@@ -24,7 +24,7 @@ def process_image(model,img_name,input_folder='in/',output_folder='out/'):
     imageUtils.saveImage(mask_image,imgFileResult)
     imageUtils.saveDetail(result,txtFileResult)
     # muestro las imagenes por pantalla
-    imageUtils.show_image(mask_image)
+    #imageUtils.show_image(mask_image)
 
 def procesar_archivos(model,files_list):
     for file_name in files_list:
