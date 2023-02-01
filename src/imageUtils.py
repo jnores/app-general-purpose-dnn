@@ -3,6 +3,7 @@ import numpy as np
 import random
 from PIL import Image
 import matplotlib.pyplot as plt
+import io
 
 # creo un color aleatorio para cada clase/categoria que identifica la red
 COLORS = np.random.uniform(0,127,size=(100,3))
@@ -15,6 +16,11 @@ def isNotImage(name):
 
 def load_image(file_name):
     return Image.open(file_name).convert("RGB")
+
+def dataToImage(bytes_image):
+    stream = io.BytesIO(bytes_image)
+    return Image.open(stream).convert("RGB")
+
 
 def generateMaskImage(image,predictions):
     alpha = 1
@@ -62,6 +68,24 @@ def predToString(prediction):
         str(prediction['box'])
     ]
     return ';'.join(line)
-    # return f'{prediction["score"],};{prediction["label"]};{prediction["name"]};{prediction["color"]}'
-
     
+
+def predictions_array(predictions):
+    # print("Predictions: ")
+    # print(predictions)
+
+    return [{
+                'score': float(p['score']),
+                'label': int(p['label']),
+                'name': p['name'],
+                'mask': getMask(p['mask']),
+                # 'box': [p['box'][0][0],p['box'][0][1],p['box'][1][0],p['box'][1][1]], # (x1,y1),(x2,y2)
+                }
+            for p in predictions]
+
+def getMask(mtx):
+    #print("matrix: ")
+    #print(mtx.shape)
+    new = mtx.reshape(-1)
+    #print (new.shape)
+    return new;
